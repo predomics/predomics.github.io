@@ -13,7 +13,7 @@ module.exports = {
     navbar: {
       title: 'Predomics',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'Predomics Logo',
         src: 'img/logo.png',
       },
       items: [
@@ -25,8 +25,8 @@ module.exports = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
+          href: 'https://github.com/predomics',
+          label: 'Predomics on GitHub',
           position: 'right',
         },
       ],
