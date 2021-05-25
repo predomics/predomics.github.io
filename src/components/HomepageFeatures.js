@@ -4,7 +4,7 @@ import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
   {
-    title: 'Predomics is Easy to Use',
+    title: 'Easy to Use',
     Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
@@ -24,7 +24,7 @@ const FeatureList = [
     ),
   },
   {
-    title: 'Powered by Shiny',
+    title: 'Powered by React',
     Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
