@@ -16,7 +16,10 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.0.0'  # or a newer version
+          ruby-version: '3.0.2'
+
+      - name: Install Bundler
+        run: gem install bundler -v 2.4.21
 
       - name: Build and deploy Jekyll site
         uses: helaili/jekyll-action@2.1.0
