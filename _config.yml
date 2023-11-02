@@ -1,1 +1,5 @@
 theme: just-the-docs
+
+navigation:
+  - title: "Package Documentation"
+    url: /docs/index.html
