@@ -1,27 +1,35 @@
-name: Build and deploy Jekyll site to GitHub Pages
+name: Build and Deploy Jekyll Site
 
 on:
   push:
     branches:
-      - main  # Set a branch to deploy
+      - main
   pull_request:
+    branches:
+      - main
 
 jobs:
-  github-pages:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0.2'
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0.2'  # Specify the Ruby version you need
 
-      - name: Install Bundler
-        run: gem install bundler -v 2.4.21
+    - name: Install Bundler
+      run: |
+        gem install bundler -v '~> 2.4'
+        bundle -v
 
-      - name: Build and deploy Jekyll site
-        uses: helaili/jekyll-action@2.1.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install Dependencies
+      run: bundle install
+
+    - name: Build Jekyll Site
+      run: bundle exec jekyll build
+
+    # Add additional steps as needed for deployment or other purposes
