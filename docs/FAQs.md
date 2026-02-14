@@ -1,3 +1,10 @@
+---
+layout: default
+title: FAQs
+parent: Documentation
+nav_order: 7
+---
+
 # Frequently Asked Questions
 
 **Q1: How do I install Predomics?**

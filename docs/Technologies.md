@@ -1,8 +1,26 @@
-# Technologies Used
+---
+layout: default
+title: Technologies
+parent: Documentation
+nav_order: 6
+---
 
-Predomics is built with the following technologies:
+# Technologies
 
-- R
-- Other Libraries
+## Rust Engine (gpredomics)
+- **Rust** -- Core ML algorithms, evolutionary search, jury voting
+- **PyO3 / Maturin** -- Python bindings for seamless integration
 
-We chose these technologies for their ...
+## Web Application (predomicsapp-web)
+- **FastAPI** (Python) -- Async REST API backend
+- **Vue.js 3** -- Reactive frontend with Composition API
+- **Plotly.js** -- Interactive data visualizations
+- **PostgreSQL 16** -- User, project, and job persistence
+- **SQLAlchemy** -- Async ORM with migration support
+- **Docker Compose** -- One-command deployment
+
+## R Package (predomicspkg)
+- **R** -- Original algorithm implementations
+- **doSNOW / foreach** -- Parallel computation
+- **pROC / glmnet** -- Statistical modeling
+- **viridis** -- Data visualization

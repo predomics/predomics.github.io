@@ -1,3 +1,10 @@
+---
+layout: default
+title: Contact
+parent: Documentation
+nav_order: 9
+---
+
 # Contact
 
 If you have any questions or feedback, please contact us at:

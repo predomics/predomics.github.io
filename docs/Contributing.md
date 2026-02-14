@@ -1,3 +1,10 @@
+---
+layout: default
+title: Contributing
+parent: Documentation
+nav_order: 10
+---
+
 # Contributing to Predomics
 
 We welcome contributions to the Predomics project! Here’s how you can help:

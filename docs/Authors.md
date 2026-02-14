@@ -1,3 +1,10 @@
+---
+layout: default
+title: Authors
+parent: Documentation
+nav_order: 8
+---
+
 # Authors
 
 Predomics was created by:

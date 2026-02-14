@@ -1,5 +1,19 @@
+title: Predomics
+description: Predictive Models from Omics Data
 theme: just-the-docs
+logo: /docs/logo.png
+favicon_ico: /favicon.ico
 
-navigation:
-  - title: "Package Documentation"
-    url: /docs/index.html
+color_scheme: dark
+
+aux_links:
+  "GitHub":
+    - "https://github.com/predomics"
+
+nav_external_links:
+  - title: Web Application
+    url: https://github.com/predomics/predomicsapp-web
+  - title: R Package
+    url: https://github.com/predomics/predomicspkg
+  - title: Rust Engine
+    url: https://github.com/predomics/gpredomics
