@@ -316,20 +316,20 @@
     </div>
     <div class="hero-stats">
       <div class="stat">
-        <div class="stat-value">3</div>
-        <div class="stat-label">Implementations</div>
-      </div>
-      <div class="stat">
         <div class="stat-value">1000x</div>
-        <div class="stat-label">Faster (Rust)</div>
+        <div class="stat-label">Faster (Rust engine)</div>
       </div>
       <div class="stat">
-        <div class="stat-value">AUC 1.0</div>
-        <div class="stat-label">On Benchmark</div>
+        <div class="stat-value">&lt;1%</div>
+        <div class="stat-label">Feature selection</div>
       </div>
       <div class="stat">
-        <div class="stat-value">k=32</div>
-        <div class="stat-label">Features from 1980</div>
+        <div class="stat-value">3</div>
+        <div class="stat-label">Languages (R, Python, Web)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">Open</div>
+        <div class="stat-label">Source &amp; Free</div>
       </div>
     </div>
   </div>
@@ -389,23 +389,31 @@
       launch analyses, and explore results interactively.
     </p>
     <div class="screenshot-tabs">
-      <button class="screenshot-tab active" onclick="showScreenshot('results')">Results & Jobs</button>
-      <button class="screenshot-tab" onclick="showScreenshot('charts')">Charts & Metrics</button>
-      <button class="screenshot-tab" onclick="showScreenshot('data')">Data Explorer</button>
+      <button class="screenshot-tab active" onclick="showScreenshot('data')">Data Explorer</button>
       <button class="screenshot-tab" onclick="showScreenshot('params')">Parameters</button>
+      <button class="screenshot-tab" onclick="showScreenshot('results')">Results & Jobs</button>
+      <button class="screenshot-tab" onclick="showScreenshot('charts')">AUC Evolution</button>
+      <button class="screenshot-tab" onclick="showScreenshot('jury')">Jury Voting</button>
+      <button class="screenshot-tab" onclick="showScreenshot('population')">Population</button>
     </div>
     <div class="screenshot-frame">
-      <div id="ss-results" class="screenshot-item active">
-        <img src="/assets/screenshots/results.png" alt="Results overview with job table and summary metrics" />
-      </div>
-      <div id="ss-charts" class="screenshot-item">
-        <img src="/assets/screenshots/results_full.png" alt="AUC evolution charts and model complexity" />
-      </div>
-      <div id="ss-data" class="screenshot-item">
-        <img src="/assets/screenshots/data.png" alt="Data explorer with prevalence plots and feature filtering" />
+      <div id="ss-data" class="screenshot-item active">
+        <img src="/assets/screenshots/data.png" alt="Data explorer with prevalence plots, feature filtering and barcode visualization" />
       </div>
       <div id="ss-params" class="screenshot-item">
-        <img src="/assets/screenshots/parameters.png" alt="Parameter configuration for genetic algorithm" />
+        <img src="/assets/screenshots/parameters.png" alt="Parameter configuration for genetic algorithm, voting ensemble, and feature importance" />
+      </div>
+      <div id="ss-results" class="screenshot-item">
+        <img src="/assets/screenshots/results.png" alt="Job table with AUC scores, model complexity, and summary metrics" />
+      </div>
+      <div id="ss-charts" class="screenshot-item">
+        <img src="/assets/screenshots/results_full.png" alt="AUC evolution over generations, model complexity tracking, fit vs AUC" />
+      </div>
+      <div id="ss-jury" class="screenshot-item">
+        <img src="/assets/screenshots/jury.png" alt="Jury voting with confusion matrices, vote matrix heatmap, sample predictions and FBM population" />
+      </div>
+      <div id="ss-population" class="screenshot-item">
+        <img src="/assets/screenshots/population.png" alt="Population of models with feature heatmap and violin plots" />
       </div>
     </div>
   </div>
@@ -434,8 +442,8 @@
       </div>
       <div class="suite-card r">
         <span class="suite-badge badge-r">R Package</span>
-        <h3>predomicspkg</h3>
-        <p>The original R implementation with the complete algorithm library, visualization tools, and data analysis utilities for the R ecosystem.</p>
+        <h3>gpredomicsR</h3>
+        <p>R bindings for the gpredomics Rust engine. Successor to the original predomicspkg, bringing the 1,000x Rust speedup to the R ecosystem with a familiar interface.</p>
         <a href="https://github.com/predomics/predomicspkg" class="suite-link">View Repository &rarr;</a>
       </div>
     </div>
@@ -471,12 +479,12 @@
         </div>
       </div>
       <div class="code-card">
-        <h3>&#x1F4CA; R</h3>
+        <h3>&#x1F4CA; R (gpredomicsR)</h3>
         <div class="code-block">
-          <span class="comment"># Install from GitHub</span><br/>
-          devtools::<span class="cmd">install_github</span>(<span class="str">"predomics/predomicspkg"</span>)<br/><br/>
-          <span class="kw">library</span>(predomics)<br/>
-          result &lt;- <span class="cmd">mainFunction</span>(data)<br/>
+          <span class="comment"># Coming soon &mdash; R bindings for gpredomics</span><br/>
+          devtools::<span class="cmd">install_github</span>(<span class="str">"predomics/gpredomicsR"</span>)<br/><br/>
+          <span class="kw">library</span>(gpredomicsR)<br/>
+          result &lt;- <span class="cmd">gpredomics.fit</span>(params)<br/>
         </div>
       </div>
     </div>
