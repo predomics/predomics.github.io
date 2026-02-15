@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Predomics - Predictive Models from Omics Data</title>
+  <meta name="description" content="Open-source suite for building interpretable, parsimonious classification models from high-dimensional omics data using evolutionary algorithms." />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep: #0a0e1a;
+      --bg-card: #111827;
+      --bg-card-hover: #1a2235;
+      --accent: #3b82f6;
+      --accent-light: #60a5fa;
+      --accent-glow: rgba(59, 130, 246, 0.15);
+      --orange: #f59e0b;
+      --green: #10b981;
+      --purple: #8b5cf6;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --border: #1e293b;
+      --radius: 12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* === NAV === */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(10, 14, 26, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 1.2rem; font-weight: 700; color: white; text-decoration: none;
+    }
+    .nav-brand img { height: 32px; width: 32px; object-fit: contain; }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none; font-size: 0.9rem;
+      font-weight: 500; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: white; }
+    .nav-cta {
+      padding: 0.5rem 1.2rem; background: var(--accent); color: white;
+      border-radius: 8px; text-decoration: none; font-size: 0.85rem;
+      font-weight: 600; transition: all 0.2s;
+    }
+    .nav-cta:hover { background: var(--accent-light); transform: translateY(-1px); }
+
+    /* === HERO === */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 8rem 2rem 4rem;
+      position: relative;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.12), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139, 92, 246, 0.08), transparent);
+    }
+    .hero-content { max-width: 800px; }
+    .hero-logo {
+      width: 120px; height: 120px; object-fit: contain;
+      margin-bottom: 2rem;
+      filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.3));
+      animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .hero h1 {
+      font-size: 3.5rem; font-weight: 800; letter-spacing: -0.03em;
+      line-height: 1.1; margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-light) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero .tagline {
+      font-size: 1.25rem; color: var(--text-muted); max-width: 600px;
+      margin: 0 auto 2.5rem; font-weight: 400; line-height: 1.7;
+    }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      padding: 0.8rem 2rem; border-radius: 10px; font-weight: 600;
+      font-size: 0.95rem; text-decoration: none; transition: all 0.25s;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-primary {
+      background: var(--accent); color: white;
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+    }
+    .btn-primary:hover { background: var(--accent-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent-light); background: var(--accent-glow); }
+
+    .hero-stats {
+      display: flex; justify-content: center; gap: 3rem;
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .stat { text-align: center; }
+    .stat-value { font-size: 1.8rem; font-weight: 700; color: white; }
+    .stat-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem; }
+
+    /* === SECTIONS === */
+    section { padding: 6rem 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .section-desc {
+      font-size: 1.1rem; color: var(--text-muted); max-width: 600px;
+      margin-bottom: 3rem; line-height: 1.7;
+    }
+
+    /* === FEATURES === */
+    .features-section {
+      background: linear-gradient(180deg, var(--bg-deep) 0%, #0d1220 100%);
+    }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 2rem;
+      transition: all 0.3s;
+    }
+    .feature-card:hover {
+      border-color: var(--accent); background: var(--bg-card-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 1.2rem;
+    }
+    .fi-blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-light); }
+    .fi-orange { background: rgba(245, 158, 11, 0.15); color: var(--orange); }
+    .fi-green { background: rgba(16, 185, 129, 0.15); color: var(--green); }
+    .fi-purple { background: rgba(139, 92, 246, 0.15); color: var(--purple); }
+    .feature-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .feature-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+    /* === SCREENSHOTS === */
+    .screenshots-section { background: #0d1220; }
+    .screenshot-tabs {
+      display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap;
+    }
+    .screenshot-tab {
+      padding: 0.6rem 1.2rem; border-radius: 8px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-muted); cursor: pointer;
+      font-size: 0.85rem; font-weight: 500; transition: all 0.2s;
+      font-family: inherit;
+    }
+    .screenshot-tab:hover { border-color: var(--accent); color: var(--text); }
+    .screenshot-tab.active {
+      background: var(--accent); border-color: var(--accent); color: white;
+    }
+    .screenshot-frame {
+      border-radius: var(--radius); overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      background: var(--bg-card);
+    }
+    .screenshot-frame img {
+      width: 100%; height: auto; display: block;
+      transition: opacity 0.3s;
+    }
+    .screenshot-item { display: none; }
+    .screenshot-item.active { display: block; }
+
+    /* === SUITE === */
+    .suite-section { background: var(--bg-deep); }
+    .suite-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+    .suite-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 2rem;
+      position: relative; overflow: hidden; transition: all 0.3s;
+    }
+    .suite-card:hover {
+      border-color: var(--accent); transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+    .suite-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .suite-card.rust::before { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+    .suite-card.web::before { background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
+    .suite-card.r::before { background: linear-gradient(90deg, #10b981, #3b82f6); }
+    .suite-badge {
+      display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px;
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; margin-bottom: 1rem;
+    }
+    .badge-rust { background: rgba(245, 158, 11, 0.15); color: var(--orange); }
+    .badge-web { background: rgba(59, 130, 246, 0.15); color: var(--accent-light); }
+    .badge-r { background: rgba(16, 185, 129, 0.15); color: var(--green); }
+    .suite-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .suite-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.6; }
+    .suite-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      color: var(--accent-light); text-decoration: none; font-weight: 500;
+      font-size: 0.9rem; transition: gap 0.2s;
+    }
+    .suite-link:hover { gap: 0.7rem; }
+
+    /* === QUICKSTART === */
+    .quickstart-section { background: #0d1220; }
+    .code-block {
+      background: #0f172a; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1.5rem; margin-bottom: 1rem; overflow-x: auto;
+      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.85rem;
+      line-height: 1.8; color: var(--text-muted);
+    }
+    .code-block .comment { color: #4a5568; }
+    .code-block .cmd { color: var(--green); }
+    .code-block .str { color: var(--orange); }
+    .code-block .kw { color: var(--purple); }
+    .code-tabs {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem;
+    }
+    .code-card h3 {
+      font-size: 1rem; font-weight: 600; margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    /* === PUBLICATION === */
+    .pub-section { background: var(--bg-deep); }
+    .pub-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 2rem;
+      border-left: 3px solid var(--accent);
+    }
+    .pub-card .journal { color: var(--accent-light); font-weight: 600; font-size: 0.85rem; margin-bottom: 0.5rem; }
+    .pub-card .title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .pub-card .authors { color: var(--text-muted); font-size: 0.9rem; }
+
+    /* === FOOTER === */
+    footer {
+      padding: 3rem 2rem; border-top: 1px solid var(--border);
+      text-align: center; color: var(--text-dim); font-size: 0.85rem;
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--accent-light); }
+    .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.2rem; }
+      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .section-title { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">
+    <img src="/docs/logo.png" alt="Predomics" />
+    Predomics
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#screenshots">Screenshots</a>
+    <a href="#suite">Suite</a>
+    <a href="#quickstart">Quick Start</a>
+    <a href="/docs/">Docs</a>
+  </div>
+  <a href="https://github.com/predomics" class="nav-cta">GitHub</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <img src="/docs/logo.png" alt="Predomics" class="hero-logo" />
+    <h1>Predictive Models<br />from Omics Data</h1>
+    <p class="tagline">
+      Build interpretable, parsimonious classification models from high-dimensional
+      omics data. Discover minimal-feature signatures using evolutionary algorithms.
+    </p>
+    <div class="hero-buttons">
+      <a href="#quickstart" class="btn btn-primary">Get Started &rarr;</a>
+      <a href="https://github.com/predomics" class="btn btn-outline">View on GitHub</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Implementations</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">Rust</div>
+        <div class="stat-label">High-perf Engine</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">AUC 1.0</div>
+        <div class="stat-label">On Benchmark</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">k=32</div>
+        <div class="stat-label">Features from 1980</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-label">Why Predomics</div>
+    <h2 class="section-title">Designed for Discovery</h2>
+    <p class="section-desc">
+      From raw omics matrices to publication-ready models in minutes,
+      with full transparency at every step.
+    </p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon fi-blue">&#x2696;</div>
+        <h3>Parsimonious Models</h3>
+        <p>Discovers minimal feature sets (binary, ternary, ratio) that achieve high classification accuracy. Models you can actually interpret.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-orange">&#x1F9EC;</div>
+        <h3>Evolutionary Search</h3>
+        <p>Genetic algorithms and beam search heuristics explore the feature space efficiently to find optimal signatures.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-green">&#x1F5F3;</div>
+        <h3>Jury Voting</h3>
+        <p>Ensemble of expert models with majority or consensus voting, rejection capability, and per-sample confidence scores.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-purple">&#x1F4CA;</div>
+        <h3>Rich Visualizations</h3>
+        <p>Prevalence plots, heatmaps, violin plots, AUC evolution, model complexity tracking, and sample predictions.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-blue">&#x1F504;</div>
+        <h3>Cross-validation</h3>
+        <p>Built-in k-fold cross-validation with generation-level tracking. Monitor train vs test performance in real time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-orange">&#x26A1;</div>
+        <h3>Blazing Fast</h3>
+        <p>Core engine written in Rust. Analyze 1,980 features across 180 samples in under 10 seconds with GPU acceleration support.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENSHOTS -->
+<section class="screenshots-section" id="screenshots">
+  <div class="container">
+    <div class="section-label">See it in Action</div>
+    <h2 class="section-title">Web Application</h2>
+    <p class="section-desc">
+      A full-stack interface to upload data, configure experiments,
+      launch analyses, and explore results interactively.
+    </p>
+    <div class="screenshot-tabs">
+      <button class="screenshot-tab active" onclick="showScreenshot('results')">Results & Jobs</button>
+      <button class="screenshot-tab" onclick="showScreenshot('charts')">Charts & Metrics</button>
+      <button class="screenshot-tab" onclick="showScreenshot('data')">Data Explorer</button>
+      <button class="screenshot-tab" onclick="showScreenshot('params')">Parameters</button>
+    </div>
+    <div class="screenshot-frame">
+      <div id="ss-results" class="screenshot-item active">
+        <img src="/assets/screenshots/results.png" alt="Results overview with job table and summary metrics" />
+      </div>
+      <div id="ss-charts" class="screenshot-item">
+        <img src="/assets/screenshots/results_full.png" alt="AUC evolution charts and model complexity" />
+      </div>
+      <div id="ss-data" class="screenshot-item">
+        <img src="/assets/screenshots/data.png" alt="Data explorer with prevalence plots and feature filtering" />
+      </div>
+      <div id="ss-params" class="screenshot-item">
+        <img src="/assets/screenshots/parameters.png" alt="Parameter configuration for genetic algorithm" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUITE -->
+<section class="suite-section" id="suite">
+  <div class="container">
+    <div class="section-label">Ecosystem</div>
+    <h2 class="section-title">The Predomics Suite</h2>
+    <p class="section-desc">
+      Three complementary tools, one unified approach to interpretable omics classification.
+    </p>
+    <div class="suite-grid">
+      <div class="suite-card rust">
+        <span class="suite-badge badge-rust">Rust + Python</span>
+        <h3>gpredomics</h3>
+        <p>High-performance ML engine. Runs evolutionary algorithms at native speed with Python bindings via gpredomicspy. Full experiment control from scripts or notebooks.</p>
+        <a href="https://github.com/predomics/gpredomics" class="suite-link">View Repository &rarr;</a>
+      </div>
+      <div class="suite-card web">
+        <span class="suite-badge badge-web">FastAPI + Vue.js</span>
+        <h3>PredomicsApp</h3>
+        <p>Full-stack web application for running analyses, exploring results, managing projects, and sharing with collaborators. Deploy anywhere with Docker.</p>
+        <a href="https://github.com/predomics/predomicsapp-web" class="suite-link">View Repository &rarr;</a>
+      </div>
+      <div class="suite-card r">
+        <span class="suite-badge badge-r">R Package</span>
+        <h3>predomicspkg</h3>
+        <p>The original R implementation with the complete algorithm library, visualization tools, and data analysis utilities for the R ecosystem.</p>
+        <a href="https://github.com/predomics/predomicspkg" class="suite-link">View Repository &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICKSTART -->
+<section class="quickstart-section" id="quickstart">
+  <div class="container">
+    <div class="section-label">Get Started</div>
+    <h2 class="section-title">Up and Running in Minutes</h2>
+    <p class="section-desc">
+      Choose your preferred way to use Predomics.
+    </p>
+    <div class="code-tabs">
+      <div class="code-card">
+        <h3>&#x1F433; Docker (Web App)</h3>
+        <div class="code-block">
+          <span class="cmd">git clone</span> https://github.com/predomics/predomicsapp-web.git<br/>
+          <span class="cmd">cd</span> predomicsapp-web<br/>
+          <span class="cmd">docker compose up -d</span><br/><br/>
+          <span class="comment"># Open http://localhost:8001</span>
+        </div>
+      </div>
+      <div class="code-card">
+        <h3>&#x1F40D; Python</h3>
+        <div class="code-block">
+          <span class="kw">import</span> gpredomicspy<br/><br/>
+          param = gpredomicspy.<span class="cmd">Param</span>()<br/>
+          param.<span class="cmd">load</span>(<span class="str">"params.yaml"</span>)<br/>
+          experiment = gpredomicspy.<span class="cmd">fit</span>(param)<br/>
+          experiment.<span class="cmd">display_results</span>()
+        </div>
+      </div>
+      <div class="code-card">
+        <h3>&#x1F4CA; R</h3>
+        <div class="code-block">
+          <span class="comment"># Install from GitHub</span><br/>
+          devtools::<span class="cmd">install_github</span>(<span class="str">"predomics/predomicspkg"</span>)<br/><br/>
+          <span class="kw">library</span>(predomics)<br/>
+          result &lt;- <span class="cmd">mainFunction</span>(data)<br/>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICATION -->
+<section class="pub-section">
+  <div class="container">
+    <div class="section-label">Research</div>
+    <h2 class="section-title">Publication</h2>
+    <div class="pub-card">
+      <div class="journal">GigaScience, 2020</div>
+      <div class="title">Interpretable and accurate prediction scores for metagenomics data using a ternary encoding approach</div>
+      <div class="authors">Prifti E., Chevaleyre Y., Hanczar B., Zucker J.D. et al.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="https://github.com/predomics">GitHub</a>
+    <a href="/docs/">Documentation</a>
+    <a href="mailto:edi.prifti@ird.fr">Contact</a>
+    <a href="https://github.com/predomics/predomicspkg/issues">Issues</a>
+  </div>
+  <p>&copy; 2024 Predomics &mdash; IRD / UMMISCO &mdash; Open Source (MIT)</p>
+</footer>
+
+<script>
+function showScreenshot(name) {
+  document.querySelectorAll('.screenshot-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.screenshot-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('ss-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
