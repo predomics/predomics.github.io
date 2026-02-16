@@ -1,0 +1,27 @@
+{
+  "name": "predomics.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "screenshots": "node scripts/capture_screenshots.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/predomics/predomics.github.io.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/predomics/predomics.github.io/issues"
+  },
+  "homepage": "https://github.com/predomics/predomics.github.io#readme",
+  "dependencies": {
+    "playwright": "^1.58.2"
+  }
+}

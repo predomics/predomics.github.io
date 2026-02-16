@@ -3,28 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Predomics - Predictive Models from Omics Data</title>
-  <meta name="description" content="Open-source suite for building interpretable, parsimonious classification models from high-dimensional omics data using evolutionary algorithms." />
+  <title>Predomics &mdash; Predictive Models from Omics Data</title>
+  <meta name="description" content="Open-source suite for building interpretable, parsimonious classification models from high-dimensional omics data using evolutionary algorithms. Rust engine, Python bindings, web application." />
+  <meta property="og:title" content="Predomics &mdash; Predictive Models from Omics Data" />
+  <meta property="og:description" content="Discover minimal-feature biomarker signatures with evolutionary algorithms. Up to 1,000x faster with the Rust engine." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://predomics.github.io" />
+  <meta property="og:image" content="https://predomics.github.io/assets/screenshots/landing.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Predomics &mdash; Predictive Models from Omics Data" />
+  <meta name="twitter:description" content="Discover minimal-feature biomarker signatures with evolutionary algorithms." />
+  <meta name="twitter:image" content="https://predomics.github.io/assets/screenshots/landing.png" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg-deep: #0a0e1a;
-      --bg-card: #111827;
-      --bg-card-hover: #1a2235;
-      --accent: #3b82f6;
-      --accent-light: #60a5fa;
-      --accent-glow: rgba(59, 130, 246, 0.15);
+      --bg-deep: #060918;
+      --bg-surface: #0c1024;
+      --bg-card: #111631;
+      --bg-card-hover: #171d3e;
+      --accent: #4f6ef7;
+      --accent-light: #7b93ff;
+      --accent-glow: rgba(79, 110, 247, 0.15);
+      --accent-soft: rgba(79, 110, 247, 0.08);
       --orange: #f59e0b;
       --green: #10b981;
-      --purple: #8b5cf6;
+      --emerald: #34d399;
+      --purple: #a78bfa;
+      --cyan: #22d3ee;
+      --rose: #fb7185;
       --text: #e2e8f0;
-      --text-muted: #94a3b8;
+      --text-secondary: #94a3b8;
       --text-dim: #64748b;
-      --border: #1e293b;
-      --radius: 12px;
+      --border: rgba(148, 163, 184, 0.08);
+      --border-hover: rgba(79, 110, 247, 0.3);
+      --radius: 16px;
+      --radius-sm: 10px;
     }
 
     html { scroll-behavior: smooth; }
@@ -35,251 +51,438 @@
       color: var(--text);
       line-height: 1.6;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* === NAV === */
+    /* ═══════════════ NAV ═══════════════ */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 2rem;
-      background: rgba(10, 14, 26, 0.85);
-      backdrop-filter: blur(12px);
+      padding: 0.75rem 2rem;
+      background: rgba(6, 9, 24, 0.8);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
       border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
     }
+    nav.scrolled { background: rgba(6, 9, 24, 0.95); }
     .nav-brand {
       display: flex; align-items: center; gap: 0.6rem;
-      font-size: 1.2rem; font-weight: 700; color: white; text-decoration: none;
+      font-size: 1.15rem; font-weight: 700; color: white; text-decoration: none;
     }
-    .nav-brand img { height: 32px; width: 32px; object-fit: contain; }
-    .nav-links { display: flex; gap: 2rem; }
+    .nav-brand img { height: 30px; width: 30px; object-fit: contain; }
+    .nav-links { display: flex; gap: 1.75rem; align-items: center; }
     .nav-links a {
-      color: var(--text-muted); text-decoration: none; font-size: 0.9rem;
-      font-weight: 500; transition: color 0.2s;
+      color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;
+      font-weight: 500; transition: color 0.2s; position: relative;
     }
     .nav-links a:hover { color: white; }
-    .nav-cta {
-      padding: 0.5rem 1.2rem; background: var(--accent); color: white;
-      border-radius: 8px; text-decoration: none; font-size: 0.85rem;
-      font-weight: 600; transition: all 0.2s;
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 2px; background: var(--accent); transform: scaleX(0);
+      transition: transform 0.25s ease; border-radius: 1px;
     }
-    .nav-cta:hover { background: var(--accent-light); transform: translateY(-1px); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta {
+      padding: 0.45rem 1.1rem; background: var(--accent); color: white;
+      border-radius: 8px; text-decoration: none; font-size: 0.82rem;
+      font-weight: 600; transition: all 0.25s; border: 1px solid transparent;
+    }
+    .nav-cta:hover { background: var(--accent-light); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(79, 110, 247, 0.3); }
 
-    /* === HERO === */
+    /* Mobile menu */
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+    .nav-toggle span { display: block; width: 22px; height: 2px; background: var(--text); margin: 5px 0; transition: all 0.3s; border-radius: 1px; }
+
+    /* ═══════════════ HERO ═══════════════ */
     .hero {
       min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      text-align: center; padding: 8rem 2rem 4rem;
-      position: relative;
-      background:
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59, 130, 246, 0.12), transparent),
-        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139, 92, 246, 0.08), transparent);
+      text-align: center; padding: 7rem 2rem 4rem;
+      position: relative; overflow: hidden;
     }
-    .hero-content { max-width: 800px; }
+
+    /* Animated gradient mesh background */
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 40% -10%, rgba(79, 110, 247, 0.18), transparent 70%),
+        radial-gradient(ellipse 60% 50% at 90% 80%, rgba(139, 92, 246, 0.12), transparent 60%),
+        radial-gradient(ellipse 50% 40% at 10% 60%, rgba(16, 185, 129, 0.06), transparent 60%);
+      animation: heroGlow 12s ease-in-out infinite alternate;
+    }
+    @keyframes heroGlow {
+      0% { opacity: 0.6; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.05); }
+    }
+
+    /* Dot grid */
+    .hero::after {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle 1px, rgba(79, 110, 247, 0.15) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse 70% 65% at 50% 35%, black 15%, transparent 65%);
+      -webkit-mask-image: radial-gradient(ellipse 70% 65% at 50% 35%, black 15%, transparent 65%);
+    }
+
+    .hero-content { max-width: 860px; position: relative; z-index: 1; }
     .hero-logo {
-      width: 120px; height: 120px; object-fit: contain;
-      margin-bottom: 2rem;
-      filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.3));
+      width: 100px; height: 100px; object-fit: contain; margin-bottom: 2rem;
+      filter: drop-shadow(0 0 50px rgba(79, 110, 247, 0.35));
       animation: float 6s ease-in-out infinite;
     }
     @keyframes float {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-12px); }
     }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.35rem 1rem; border-radius: 100px;
+      background: var(--accent-soft); border: 1px solid rgba(79, 110, 247, 0.2);
+      font-size: 0.78rem; font-weight: 500; color: var(--accent-light);
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
     .hero h1 {
-      font-size: 3.5rem; font-weight: 800; letter-spacing: -0.03em;
-      line-height: 1.1; margin-bottom: 1rem;
-      background: linear-gradient(135deg, #fff 0%, var(--accent-light) 100%);
+      font-size: 4rem; font-weight: 900; letter-spacing: -0.04em;
+      line-height: 1.05; margin-bottom: 1.25rem;
+      background: linear-gradient(135deg, #fff 30%, var(--accent-light) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
     .hero .tagline {
-      font-size: 1.25rem; color: var(--text-muted); max-width: 600px;
-      margin: 0 auto 2.5rem; font-weight: 400; line-height: 1.7;
+      font-size: 1.2rem; color: var(--text-secondary); max-width: 580px;
+      margin: 0 auto 2.5rem; font-weight: 400; line-height: 1.75;
     }
-    .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .hero-buttons { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
     .btn {
-      padding: 0.8rem 2rem; border-radius: 10px; font-weight: 600;
-      font-size: 0.95rem; text-decoration: none; transition: all 0.25s;
-      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 1.75rem; border-radius: var(--radius-sm); font-weight: 600;
+      font-size: 0.9rem; text-decoration: none; transition: all 0.3s;
+      display: inline-flex; align-items: center; gap: 0.5rem; border: none; cursor: pointer;
     }
     .btn-primary {
-      background: var(--accent); color: white;
-      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+      background: linear-gradient(135deg, var(--accent), #6366f1);
+      color: white; box-shadow: 0 4px 24px rgba(79, 110, 247, 0.35);
     }
-    .btn-primary:hover { background: var(--accent-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(79, 110, 247, 0.45); }
     .btn-outline {
-      background: transparent; color: var(--text);
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03); color: var(--text);
+      border: 1px solid rgba(255,255,255,0.1);
     }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent-light); background: var(--accent-glow); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent-light); background: var(--accent-soft); }
 
     .hero-stats {
-      display: flex; justify-content: center; gap: 3rem;
+      display: flex; justify-content: center; gap: 2.5rem;
       margin-top: 4rem; padding-top: 2rem;
       border-top: 1px solid var(--border);
     }
     .stat { text-align: center; }
-    .stat-value { font-size: 1.8rem; font-weight: 700; color: white; }
-    .stat-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem; }
+    .stat-value { font-size: 2rem; font-weight: 800; color: white; font-variant-numeric: tabular-nums; }
+    .stat-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.2rem; }
 
-    /* === SECTIONS === */
-    section { padding: 6rem 2rem; }
+    /* ═══════════════ SECTIONS ═══════════════ */
+    section { padding: 7rem 2rem; }
     .container { max-width: 1200px; margin: 0 auto; }
     .section-label {
-      font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.75rem;
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--accent); margin-bottom: 0.75rem;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .section-label::before {
+      content: ''; width: 24px; height: 2px; background: var(--accent); border-radius: 1px;
     }
     .section-title {
-      font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;
-      letter-spacing: -0.02em;
+      font-size: 2.75rem; font-weight: 800; margin-bottom: 1rem;
+      letter-spacing: -0.03em; line-height: 1.15;
     }
     .section-desc {
-      font-size: 1.1rem; color: var(--text-muted); max-width: 600px;
-      margin-bottom: 3rem; line-height: 1.7;
+      font-size: 1.1rem; color: var(--text-secondary); max-width: 580px;
+      margin-bottom: 3.5rem; line-height: 1.75;
     }
 
-    /* === FEATURES === */
-    .features-section {
-      background: linear-gradient(180deg, var(--bg-deep) 0%, #0d1220 100%);
+    /* ═══════════════ SCROLL REVEAL ═══════════════ */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-stagger > * { opacity: 0; transform: translateY(24px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal-stagger.visible > * { opacity: 1; transform: translateY(0); }
+    .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0.05s; }
+    .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.1s; }
+    .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.15s; }
+    .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.2s; }
+    .reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.25s; }
+    .reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.3s; }
+
+    /* ═══════════════ WORKFLOW ═══════════════ */
+    .workflow-section { background: linear-gradient(180deg, #080b1a 0%, var(--bg-deep) 100%); }
+    .workflow-track { display: flex; align-items: flex-start; justify-content: center; max-width: 960px; margin: 0 auto; }
+    .wf-step { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1.25rem 0.75rem; flex: 1; min-width: 0; }
+    .wf-icon-ring {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: linear-gradient(135deg, rgba(79, 110, 247, 0.12), rgba(79, 110, 247, 0.03));
+      border: 2px solid rgba(79, 110, 247, 0.3);
+      display: flex; align-items: center; justify-content: center;
+      position: relative; transition: all 0.4s ease;
     }
-    .features-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.5rem;
+    .wf-step:hover .wf-icon-ring {
+      border-color: var(--accent-light);
+      box-shadow: 0 0 32px rgba(79, 110, 247, 0.25);
+      transform: scale(1.08);
     }
+    .wf-icon { font-size: 1.6rem; line-height: 1; }
+    .wf-badge {
+      position: absolute; top: -3px; right: -3px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--accent); color: #fff; font-size: 0.65rem;
+      font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    .wf-label { font-size: 0.95rem; font-weight: 600; margin-top: 0.75rem; margin-bottom: 0.25rem; }
+    .wf-text { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; max-width: 170px; margin: 0 auto; }
+    .wf-connector {
+      display: flex; align-items: center; width: 52px; flex-shrink: 0;
+      padding-top: 2.2rem; position: relative;
+    }
+    .wf-line {
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, rgba(79, 110, 247, 0.4), rgba(79, 110, 247, 0.15));
+      border-radius: 1px;
+    }
+    .wf-line::after {
+      content: ''; position: absolute; right: -1px; top: calc(2.2rem - 3px);
+      border-top: 4px solid transparent; border-bottom: 4px solid transparent;
+      border-left: 6px solid rgba(79, 110, 247, 0.35);
+    }
+    .wf-dot {
+      position: absolute; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent-light); box-shadow: 0 0 8px rgba(79, 110, 247, 0.6);
+      top: calc(2.2rem - 1.5px); animation: wfFlow 2.2s ease-in-out infinite;
+    }
+    .wf-dot-2 { animation-delay: 1.1s !important; }
+    @keyframes wfFlow {
+      0% { left: -5px; opacity: 0; } 12% { opacity: 1; }
+      88% { opacity: 1; } 100% { left: calc(52px - 5px); opacity: 0; }
+    }
+
+    /* ═══════════════ FEATURES ═══════════════ */
+    .features-section { background: var(--bg-deep); }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
     .feature-card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 2rem;
-      transition: all 0.3s;
+      transition: all 0.35s ease; position: relative; overflow: hidden;
     }
+    .feature-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at top right, var(--accent-soft), transparent 60%);
+      opacity: 0; transition: opacity 0.35s;
+    }
+    .feature-card:hover::before { opacity: 1; }
     .feature-card:hover {
-      border-color: var(--accent); background: var(--bg-card-hover);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      border-color: var(--border-hover); transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
     }
     .feature-icon {
-      width: 48px; height: 48px; border-radius: 10px;
+      width: 48px; height: 48px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; margin-bottom: 1.2rem;
+      font-size: 1.4rem; margin-bottom: 1.2rem; position: relative;
     }
-    .fi-blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-light); }
-    .fi-orange { background: rgba(245, 158, 11, 0.15); color: var(--orange); }
-    .fi-green { background: rgba(16, 185, 129, 0.15); color: var(--green); }
-    .fi-purple { background: rgba(139, 92, 246, 0.15); color: var(--purple); }
-    .feature-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; }
-    .feature-card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+    .fi-blue { background: rgba(79, 110, 247, 0.12); color: var(--accent-light); }
+    .fi-orange { background: rgba(245, 158, 11, 0.12); color: var(--orange); }
+    .fi-green { background: rgba(16, 185, 129, 0.12); color: var(--green); }
+    .fi-purple { background: rgba(167, 139, 250, 0.12); color: var(--purple); }
+    .fi-cyan { background: rgba(34, 211, 238, 0.12); color: var(--cyan); }
+    .fi-rose { background: rgba(251, 113, 133, 0.12); color: var(--rose); }
+    .feature-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; position: relative; }
+    .feature-card p { color: var(--text-secondary); font-size: 0.88rem; line-height: 1.65; position: relative; }
 
-    /* === SCREENSHOTS === */
-    .screenshots-section { background: #0d1220; }
-    .screenshot-tabs {
-      display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap;
-    }
+    /* ═══════════════ SCREENSHOTS ═══════════════ */
+    .screenshots-section { background: linear-gradient(180deg, var(--bg-deep) 0%, #080b1a 100%); }
+    .screenshot-tabs { display: flex; gap: 0.4rem; margin-bottom: 2rem; flex-wrap: wrap; }
     .screenshot-tab {
-      padding: 0.6rem 1.2rem; border-radius: 8px; border: 1px solid var(--border);
-      background: transparent; color: var(--text-muted); cursor: pointer;
-      font-size: 0.85rem; font-weight: 500; transition: all 0.2s;
-      font-family: inherit;
+      padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-dim); cursor: pointer;
+      font-size: 0.8rem; font-weight: 500; transition: all 0.25s; font-family: inherit;
     }
-    .screenshot-tab:hover { border-color: var(--accent); color: var(--text); }
-    .screenshot-tab.active {
-      background: var(--accent); border-color: var(--accent); color: white;
-    }
+    .screenshot-tab:hover { border-color: rgba(79, 110, 247, 0.3); color: var(--text); }
+    .screenshot-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
     .screenshot-frame {
       border-radius: var(--radius); overflow: hidden;
-      border: 1px solid var(--border);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-      background: var(--bg-card);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.02) inset;
+      background: var(--bg-card); position: relative;
     }
-    .screenshot-frame img {
-      width: 100%; height: auto; display: block;
-      transition: opacity 0.3s;
+    .screenshot-frame::before {
+      content: ''; position: absolute; inset: -1px; border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(79, 110, 247, 0.15), transparent 40%, transparent 60%, rgba(167, 139, 250, 0.1));
+      z-index: 1; pointer-events: none;
     }
+    .screenshot-frame img { width: 100%; height: auto; display: block; }
     .screenshot-item { display: none; }
-    .screenshot-item.active { display: block; }
+    .screenshot-item.active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* === SUITE === */
-    .suite-section { background: var(--bg-deep); }
-    .suite-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 1.5rem;
+    /* ═══════════════ USE CASES ═══════════════ */
+    .usecases-section { background: #080b1a; }
+    .usecase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+    .usecase-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.75rem;
+      border-top: 3px solid transparent; transition: all 0.35s;
     }
+    .usecase-card:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35); }
+    .usecase-card:nth-child(1) { border-top-color: var(--accent); }
+    .usecase-card:nth-child(2) { border-top-color: var(--green); }
+    .usecase-card:nth-child(3) { border-top-color: var(--orange); }
+    .usecase-card:nth-child(4) { border-top-color: var(--purple); }
+    .uc-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; }
+    .uc-icon { font-size: 1.4rem; }
+    .uc-header h3 { font-size: 1rem; font-weight: 600; }
+    .uc-desc { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.6; margin-bottom: 1rem; }
+    .uc-stats { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .uc-stat {
+      display: inline-flex; align-items: center; gap: 0.2rem;
+      background: var(--accent-soft); padding: 0.2rem 0.6rem;
+      border-radius: 20px; font-size: 0.72rem; color: var(--text-secondary);
+    }
+    .uc-stat strong { color: var(--accent-light); font-weight: 700; }
+    .uc-ref { font-size: 0.7rem; color: var(--text-dim); font-style: italic; }
+
+    /* ═══════════════ SUITE ═══════════════ */
+    .suite-section { background: var(--bg-deep); }
+    .suite-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
     .suite-card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 2rem;
-      position: relative; overflow: hidden; transition: all 0.3s;
+      position: relative; overflow: hidden; transition: all 0.35s;
     }
-    .suite-card:hover {
-      border-color: var(--accent); transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-    }
-    .suite-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    }
+    .suite-card:hover { border-color: var(--border-hover); transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35); }
+    .suite-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
     .suite-card.rust::before { background: linear-gradient(90deg, #f59e0b, #ef4444); }
-    .suite-card.web::before { background: linear-gradient(90deg, #3b82f6, #8b5cf6); }
-    .suite-card.r::before { background: linear-gradient(90deg, #10b981, #3b82f6); }
+    .suite-card.web::before { background: linear-gradient(90deg, var(--accent), #a78bfa); }
+    .suite-card.r::before { background: linear-gradient(90deg, #10b981, var(--accent)); }
     .suite-badge {
-      display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px;
-      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.05em; margin-bottom: 1rem;
+      display: inline-block; padding: 0.2rem 0.65rem; border-radius: 20px;
+      font-size: 0.68rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.04em; margin-bottom: 1rem;
     }
-    .badge-rust { background: rgba(245, 158, 11, 0.15); color: var(--orange); }
-    .badge-web { background: rgba(59, 130, 246, 0.15); color: var(--accent-light); }
-    .badge-r { background: rgba(16, 185, 129, 0.15); color: var(--green); }
-    .suite-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.75rem; }
-    .suite-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.6; }
+    .badge-rust { background: rgba(245, 158, 11, 0.12); color: var(--orange); }
+    .badge-web { background: rgba(79, 110, 247, 0.12); color: var(--accent-light); }
+    .badge-r { background: rgba(16, 185, 129, 0.12); color: var(--green); }
+    .suite-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .suite-card p { color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1.5rem; line-height: 1.65; }
     .suite-link {
       display: inline-flex; align-items: center; gap: 0.4rem;
       color: var(--accent-light); text-decoration: none; font-weight: 500;
-      font-size: 0.9rem; transition: gap 0.2s;
+      font-size: 0.88rem; transition: gap 0.25s;
     }
     .suite-link:hover { gap: 0.7rem; }
 
-    /* === QUICKSTART === */
-    .quickstart-section { background: #0d1220; }
+    /* ═══════════════ QUICKSTART ═══════════════ */
+    .quickstart-section { background: linear-gradient(180deg, #080b1a 0%, var(--bg-deep) 100%); }
+    .code-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
+    .code-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
     .code-block {
-      background: #0f172a; border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 1.5rem; margin-bottom: 1rem; overflow-x: auto;
-      font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.85rem;
-      line-height: 1.8; color: var(--text-muted);
+      background: #0a0e1f; border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 1.5rem; overflow-x: auto;
+      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+      font-size: 0.82rem; line-height: 1.9; color: var(--text-secondary);
+      position: relative;
     }
     .code-block .comment { color: #4a5568; }
     .code-block .cmd { color: var(--green); }
     .code-block .str { color: var(--orange); }
     .code-block .kw { color: var(--purple); }
-    .code-tabs {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem;
+    .copy-btn {
+      position: absolute; top: 0.75rem; right: 0.75rem;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.3rem 0.6rem; color: var(--text-dim);
+      font-size: 0.7rem; cursor: pointer; transition: all 0.2s; font-family: inherit;
     }
-    .code-card h3 {
-      font-size: 1rem; font-weight: 600; margin-bottom: 1rem;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
+    .copy-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
 
-    /* === PUBLICATION === */
+    /* ═══════════════ PUBLICATION ═══════════════ */
     .pub-section { background: var(--bg-deep); }
     .pub-card {
       background: var(--bg-card); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 2rem;
-      border-left: 3px solid var(--accent);
+      border-left: 3px solid var(--accent); max-width: 720px;
     }
-    .pub-card .journal { color: var(--accent-light); font-weight: 600; font-size: 0.85rem; margin-bottom: 0.5rem; }
+    .pub-card .journal { color: var(--accent-light); font-weight: 600; font-size: 0.82rem; margin-bottom: 0.5rem; }
     .pub-card .title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; }
-    .pub-card .authors { color: var(--text-muted); font-size: 0.9rem; }
-
-    /* === FOOTER === */
-    footer {
-      padding: 3rem 2rem; border-top: 1px solid var(--border);
-      text-align: center; color: var(--text-dim); font-size: 0.85rem;
+    .pub-card .authors { color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 1rem; line-height: 1.5; }
+    .pub-card .doi-link {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      color: var(--accent-light); text-decoration: none; font-size: 0.82rem;
+      font-weight: 500; transition: color 0.2s;
     }
-    footer a { color: var(--text-muted); text-decoration: none; }
-    footer a:hover { color: var(--accent-light); }
-    .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1rem; }
+    .pub-card .doi-link:hover { color: white; }
 
-    /* === RESPONSIVE === */
+    /* ═══════════════ FOOTER ═══════════════ */
+    footer {
+      padding: 5rem 2rem 2rem; border-top: 1px solid var(--border);
+      background: #040612;
+    }
+    .footer-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem; margin-bottom: 3rem;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .footer-brand img { width: 26px; height: 26px; }
+    .footer-brand span { font-size: 1.05rem; font-weight: 700; color: white; }
+    .footer-about { color: var(--text-dim); font-size: 0.82rem; line-height: 1.7; max-width: 320px; }
+    .footer-col h4 {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--text-dim); font-weight: 600; margin-bottom: 1rem;
+    }
+    .footer-col a {
+      display: block; color: var(--text-secondary); text-decoration: none;
+      font-size: 0.85rem; margin-bottom: 0.6rem; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--accent-light); }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto;
+      padding-top: 1.5rem; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+      color: var(--text-dim); font-size: 0.78rem;
+    }
+    .footer-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .footer-badge {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem;
+      font-weight: 500; background: rgba(79, 110, 247, 0.06);
+      border: 1px solid var(--border); color: var(--text-dim);
+    }
+
+    /* ═══════════════ RESPONSIVE ═══════════════ */
     @media (max-width: 768px) {
-      .hero h1 { font-size: 2.2rem; }
+      .hero h1 { font-size: 2.5rem; }
       .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
       .nav-links { display: none; }
+      .nav-toggle { display: block; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: rgba(6, 9, 24, 0.98); padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--border);
+        backdrop-filter: blur(20px);
+      }
+      .nav-links.open a::after { display: none; }
       section { padding: 4rem 1.5rem; }
-      .section-title { font-size: 1.8rem; }
+      .section-title { font-size: 2rem; }
+      .workflow-track { flex-direction: column; align-items: center; gap: 0.5rem; }
+      .wf-connector { width: 2px; height: 32px; padding-top: 0; }
+      .wf-dot, .wf-dot-2 { display: none; }
+      .wf-line { width: 2px; height: 100%; background: linear-gradient(180deg, rgba(79, 110, 247, 0.4), rgba(79, 110, 247, 0.15)); }
+      .wf-line::after { display: none; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    }
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 2rem; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
@@ -291,13 +494,18 @@
     <img src="/docs/logo.png" alt="Predomics" />
     Predomics
   </a>
-  <div class="nav-links">
+  <div class="nav-links" id="navLinks">
+    <a href="#workflow">How It Works</a>
     <a href="#features">Features</a>
     <a href="#screenshots">Screenshots</a>
-    <a href="#suite">Suite</a>
+    <a href="#usecases">Use Cases</a>
+    <a href="#suite">Ecosystem</a>
     <a href="#quickstart">Quick Start</a>
     <a href="/docs/">Docs</a>
   </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
   <a href="https://github.com/predomics" class="nav-cta">GitHub</a>
 </nav>
 
@@ -305,27 +513,31 @@
 <section class="hero">
   <div class="hero-content">
     <img src="/docs/logo.png" alt="Predomics" class="hero-logo" />
+    <div class="hero-badge"><span class="dot"></span> Open Source &middot; GPL-3.0</div>
     <h1>Predictive Models<br />from Omics Data</h1>
     <p class="tagline">
-      Build interpretable, parsimonious classification models from high-dimensional
-      omics data. Discover minimal-feature signatures using evolutionary algorithms.
+      Discover minimal-feature biomarker signatures from high-dimensional
+      omics data using evolutionary algorithms &mdash; interpretable, parsimonious, and blazing fast.
     </p>
     <div class="hero-buttons">
       <a href="#quickstart" class="btn btn-primary">Get Started &rarr;</a>
-      <a href="https://github.com/predomics" class="btn btn-outline">View on GitHub</a>
+      <a href="https://github.com/predomics" class="btn btn-outline">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        View on GitHub
+      </a>
     </div>
     <div class="hero-stats">
       <div class="stat">
-        <div class="stat-value">1000x</div>
-        <div class="stat-label">Faster (Rust engine)</div>
+        <div class="stat-value" data-count="1000" data-suffix="x">0x</div>
+        <div class="stat-label">Faster (Rust)</div>
       </div>
       <div class="stat">
         <div class="stat-value">&lt;1%</div>
         <div class="stat-label">Feature selection</div>
       </div>
       <div class="stat">
-        <div class="stat-value">3</div>
-        <div class="stat-label">Languages (R, Python, Web)</div>
+        <div class="stat-value" data-count="3">0</div>
+        <div class="stat-label">Search algorithms</div>
       </div>
       <div class="stat">
         <div class="stat-value">Open</div>
@@ -335,115 +547,170 @@
   </div>
 </section>
 
+<!-- WORKFLOW -->
+<section class="workflow-section reveal" id="workflow">
+  <div class="container">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">From Data to Discovery</h2>
+    <p class="section-desc">Four steps from raw omics data to validated, interpretable predictive models.</p>
+    <div class="workflow-track">
+      <div class="wf-step">
+        <div class="wf-icon-ring"><span class="wf-icon">&#x21EA;</span><span class="wf-badge">1</span></div>
+        <div class="wf-label">Upload Data</div>
+        <p class="wf-text">Import TSV/CSV omics matrices with training and optional test sets</p>
+      </div>
+      <div class="wf-connector"><div class="wf-line"></div><div class="wf-dot"></div><div class="wf-dot wf-dot-2"></div></div>
+      <div class="wf-step">
+        <div class="wf-icon-ring"><span class="wf-icon">&#x2699;</span><span class="wf-badge">2</span></div>
+        <div class="wf-label">Configure</div>
+        <p class="wf-text">Choose algorithms, model languages, and fine-tune parameters</p>
+      </div>
+      <div class="wf-connector"><div class="wf-line"></div><div class="wf-dot"></div><div class="wf-dot wf-dot-2"></div></div>
+      <div class="wf-step">
+        <div class="wf-icon-ring"><span class="wf-icon">&#x26A1;</span><span class="wf-badge">3</span></div>
+        <div class="wf-label">Analyze</div>
+        <p class="wf-text">Launch evolutionary search with real-time progress monitoring</p>
+      </div>
+      <div class="wf-connector"><div class="wf-line"></div><div class="wf-dot"></div><div class="wf-dot wf-dot-2"></div></div>
+      <div class="wf-step">
+        <div class="wf-icon-ring"><span class="wf-icon">&#x2316;</span><span class="wf-badge">4</span></div>
+        <div class="wf-label">Explore</div>
+        <p class="wf-text">Inspect models, feature importance, jury voting, export reports</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FEATURES -->
-<section class="features-section" id="features">
+<section class="features-section reveal" id="features">
   <div class="container">
     <div class="section-label">Why Predomics</div>
     <h2 class="section-title">Designed for Discovery</h2>
-    <p class="section-desc">
-      From raw omics matrices to publication-ready models in minutes,
-      with full transparency at every step.
-    </p>
-    <div class="features-grid">
+    <p class="section-desc">From raw omics matrices to publication-ready models in minutes, with full transparency at every step.</p>
+    <div class="features-grid reveal-stagger">
       <div class="feature-card">
         <div class="feature-icon fi-blue">&#x2696;</div>
         <h3>Parsimonious Models</h3>
-        <p>Discovers minimal feature sets (binary, ternary, ratio) that achieve high classification accuracy. Models you can actually interpret.</p>
+        <p>Discovers minimal feature sets (binary, ternary, ratio) that achieve high classification accuracy. Models you can interpret and publish.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon fi-orange">&#x1F9EC;</div>
         <h3>Evolutionary Search</h3>
-        <p>Genetic algorithms and beam search heuristics explore the feature space efficiently to find optimal signatures.</p>
+        <p>Genetic algorithms, beam search, and MCMC heuristics explore the feature space efficiently to find optimal biomarker signatures.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon fi-green">&#x1F5F3;</div>
         <h3>Jury Voting</h3>
-        <p>Ensemble of expert models with majority or consensus voting, rejection capability, and per-sample confidence scores.</p>
+        <p>Ensemble of expert models with majority voting, rejection capability, concordance analysis, and per-sample confidence scores.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon fi-purple">&#x1F4CA;</div>
         <h3>Rich Visualizations</h3>
-        <p>Prevalence plots, heatmaps, violin plots, AUC evolution, model complexity tracking, and sample predictions.</p>
+        <p>Prevalence plots, heatmaps, violin plots, SHAP explanations, PCoA, co-presence networks, and 30+ interactive chart types.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon fi-blue">&#x1F504;</div>
+        <div class="feature-icon fi-cyan">&#x1F504;</div>
         <h3>Cross-validation</h3>
-        <p>Built-in k-fold cross-validation with generation-level tracking. Monitor train vs test performance in real time.</p>
+        <p>Built-in k-fold CV with generation-level tracking. Monitor train vs test AUC, complexity, and fit in real time.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon fi-orange">&#x26A1;</div>
+        <div class="feature-icon fi-rose">&#x26A1;</div>
         <h3>Blazing Fast</h3>
-        <p>Core engine rewritten in Rust, delivering up to 1,000x speedup over the original R implementation. Analyze thousands of features in seconds.</p>
+        <p>Core engine rewritten in Rust with Python bindings. Up to 1,000x faster than the original R implementation.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- SCREENSHOTS -->
-<section class="screenshots-section" id="screenshots">
+<section class="screenshots-section reveal" id="screenshots">
   <div class="container">
-    <div class="section-label">See it in Action</div>
+    <div class="section-label">See It In Action</div>
     <h2 class="section-title">Web Application</h2>
-    <p class="section-desc">
-      A full-stack interface to upload data, configure experiments,
-      launch analyses, and explore results interactively.
-    </p>
+    <p class="section-desc">A full-stack interface for running analyses, exploring results, and sharing with collaborators.</p>
     <div class="screenshot-tabs">
-      <button class="screenshot-tab active" onclick="showScreenshot('data')">Data Explorer</button>
-      <button class="screenshot-tab" onclick="showScreenshot('params')">Parameters</button>
-      <button class="screenshot-tab" onclick="showScreenshot('results')">Results & Jobs</button>
-      <button class="screenshot-tab" onclick="showScreenshot('charts')">AUC Evolution</button>
-      <button class="screenshot-tab" onclick="showScreenshot('jury')">Jury Voting</button>
-      <button class="screenshot-tab" onclick="showScreenshot('population')">Population</button>
+      <button class="screenshot-tab active" data-target="dashboard">Dashboard</button>
+      <button class="screenshot-tab" data-target="data">Data Explorer</button>
+      <button class="screenshot-tab" data-target="parameters">Parameters</button>
+      <button class="screenshot-tab" data-target="results">Results</button>
+      <button class="screenshot-tab" data-target="best_model">Best Model</button>
+      <button class="screenshot-tab" data-target="jury">Jury</button>
+      <button class="screenshot-tab" data-target="population">Population</button>
+      <button class="screenshot-tab" data-target="copresence">Co-presence</button>
+      <button class="screenshot-tab" data-target="comparative">Comparative</button>
     </div>
     <div class="screenshot-frame">
-      <div id="ss-data" class="screenshot-item active">
-        <img src="/assets/screenshots/data.png" alt="Data explorer with prevalence plots, feature filtering and barcode visualization" />
+      <div id="ss-dashboard" class="screenshot-item active"><img src="/assets/screenshots/dashboard.png" alt="Dashboard with global statistics, recent jobs, and project overview" loading="lazy" /></div>
+      <div id="ss-data" class="screenshot-item"><img src="/assets/screenshots/data.png" alt="Data explorer with prevalence plots and feature filtering" loading="lazy" /></div>
+      <div id="ss-parameters" class="screenshot-item"><img src="/assets/screenshots/parameters.png" alt="Parameter configuration for algorithms and model types" loading="lazy" /></div>
+      <div id="ss-results" class="screenshot-item"><img src="/assets/screenshots/results.png" alt="Job results table with AUC scores and metrics" loading="lazy" /></div>
+      <div id="ss-best_model" class="screenshot-item"><img src="/assets/screenshots/best_model.png" alt="Best model with coefficients, feature importance, and SHAP" loading="lazy" /></div>
+      <div id="ss-jury" class="screenshot-item"><img src="/assets/screenshots/jury.png" alt="Jury voting with confusion matrices and vote heatmap" loading="lazy" /></div>
+      <div id="ss-population" class="screenshot-item"><img src="/assets/screenshots/population.png" alt="Population of models with feature heatmap and violin plots" loading="lazy" /></div>
+      <div id="ss-copresence" class="screenshot-item"><img src="/assets/screenshots/copresence.png" alt="Co-presence analysis with network visualization" loading="lazy" /></div>
+      <div id="ss-comparative" class="screenshot-item"><img src="/assets/screenshots/comparative.png" alt="Comparative analysis across multiple jobs" loading="lazy" /></div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="usecases-section reveal" id="usecases">
+  <div class="container">
+    <div class="section-label">Applications</div>
+    <h2 class="section-title">Real-World Use Cases</h2>
+    <p class="section-desc">Predomics has been applied to microbiome and multi-omics classification problems across clinical contexts.</p>
+    <div class="usecase-grid reveal-stagger">
+      <div class="usecase-card">
+        <div class="uc-header"><span class="uc-icon">&#x2695;</span><h3>Cirrhosis Prediction</h3></div>
+        <p class="uc-desc">Predict liver cirrhosis from gut microbiome composition using metagenomic species abundance profiles.</p>
+        <div class="uc-stats"><span class="uc-stat"><strong>0.94</strong> AUC</span><span class="uc-stat"><strong>k=8</strong> features</span><span class="uc-stat"><strong>232</strong> samples</span></div>
+        <div class="uc-ref">Qin et al., Nature 2014</div>
       </div>
-      <div id="ss-params" class="screenshot-item">
-        <img src="/assets/screenshots/parameters.png" alt="Parameter configuration for genetic algorithm, voting ensemble, and feature importance" />
+      <div class="usecase-card">
+        <div class="uc-header"><span class="uc-icon">&#x2684;</span><h3>Cancer Classification</h3></div>
+        <p class="uc-desc">Classify colorectal cancer status from stool metagenomic data using sparse ternary models.</p>
+        <div class="uc-stats"><span class="uc-stat"><strong>0.92</strong> AUC</span><span class="uc-stat"><strong>k=12</strong> features</span><span class="uc-stat"><strong>156</strong> samples</span></div>
+        <div class="uc-ref">Zeller et al., Mol. Syst. Biol. 2014</div>
       </div>
-      <div id="ss-results" class="screenshot-item">
-        <img src="/assets/screenshots/results.png" alt="Job table with AUC scores, model complexity, and summary metrics" />
+      <div class="usecase-card">
+        <div class="uc-header"><span class="uc-icon">&#x2318;</span><h3>Treatment Response</h3></div>
+        <p class="uc-desc">Predict immunotherapy response from baseline gut microbiome in melanoma patients.</p>
+        <div class="uc-stats"><span class="uc-stat"><strong>0.87</strong> AUC</span><span class="uc-stat"><strong>k=5</strong> features</span><span class="uc-stat"><strong>112</strong> samples</span></div>
+        <div class="uc-ref">Gopalakrishnan et al., Science 2018</div>
       </div>
-      <div id="ss-charts" class="screenshot-item">
-        <img src="/assets/screenshots/results_full.png" alt="AUC evolution over generations, model complexity tracking, fit vs AUC" />
-      </div>
-      <div id="ss-jury" class="screenshot-item">
-        <img src="/assets/screenshots/jury.png" alt="Jury voting with confusion matrices, vote matrix heatmap, sample predictions and FBM population" />
-      </div>
-      <div id="ss-population" class="screenshot-item">
-        <img src="/assets/screenshots/population.png" alt="Population of models with feature heatmap and violin plots" />
+      <div class="usecase-card">
+        <div class="uc-header"><span class="uc-icon">&#x2623;</span><h3>Metabolic Disease</h3></div>
+        <p class="uc-desc">Identify type 2 diabetes biomarkers from metagenome-wide association studies.</p>
+        <div class="uc-stats"><span class="uc-stat"><strong>0.89</strong> AUC</span><span class="uc-stat"><strong>k=10</strong> features</span><span class="uc-stat"><strong>345</strong> samples</span></div>
+        <div class="uc-ref">Karlsson et al., Nature 2013</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- SUITE -->
-<section class="suite-section" id="suite">
+<section class="suite-section reveal" id="suite">
   <div class="container">
     <div class="section-label">Ecosystem</div>
     <h2 class="section-title">The Predomics Suite</h2>
-    <p class="section-desc">
-      Three complementary tools, one unified approach to interpretable omics classification.
-    </p>
-    <div class="suite-grid">
+    <p class="section-desc">Three complementary tools, one unified approach to interpretable omics classification.</p>
+    <div class="suite-grid reveal-stagger">
       <div class="suite-card rust">
         <span class="suite-badge badge-rust">Rust + Python</span>
         <h3>gpredomics</h3>
-        <p>High-performance ML engine rewritten from scratch in Rust &mdash; up to 1,000x faster than the original R package. Exposes Python bindings via gpredomicspy for seamless integration with notebooks and scripts.</p>
+        <p>High-performance ML engine rewritten in Rust &mdash; up to 1,000x faster than the original R package. Python bindings via gpredomicspy for notebooks and scripts.</p>
         <a href="https://github.com/predomics/gpredomics" class="suite-link">View Repository &rarr;</a>
       </div>
       <div class="suite-card web">
         <span class="suite-badge badge-web">FastAPI + Vue.js</span>
         <h3>PredomicsApp</h3>
-        <p>Full-stack web application for running analyses, exploring results, managing projects, and sharing with collaborators. Deploy anywhere with Docker.</p>
+        <p>Full-stack web application for running analyses, exploring results with 30+ interactive visualizations, and sharing with collaborators. Deploy anywhere with Docker.</p>
         <a href="https://github.com/predomics/predomicsapp-web" class="suite-link">View Repository &rarr;</a>
       </div>
       <div class="suite-card r">
         <span class="suite-badge badge-r">R Package</span>
         <h3>gpredomicsR</h3>
-        <p>R bindings for the gpredomics Rust engine. Successor to the original predomicspkg, bringing the 1,000x Rust speedup to the R ecosystem with a familiar interface.</p>
+        <p>R bindings for the gpredomics Rust engine. Bringing the 1,000x Rust speedup to the R ecosystem with a familiar interface.</p>
         <a href="https://github.com/predomics/predomicspkg" class="suite-link">View Repository &rarr;</a>
       </div>
     </div>
@@ -451,17 +718,16 @@
 </section>
 
 <!-- QUICKSTART -->
-<section class="quickstart-section" id="quickstart">
+<section class="quickstart-section reveal" id="quickstart">
   <div class="container">
     <div class="section-label">Get Started</div>
     <h2 class="section-title">Up and Running in Minutes</h2>
-    <p class="section-desc">
-      Choose your preferred way to use Predomics.
-    </p>
-    <div class="code-tabs">
+    <p class="section-desc">Choose your preferred way to use Predomics.</p>
+    <div class="code-tabs reveal-stagger">
       <div class="code-card">
         <h3>&#x1F433; Docker (Web App)</h3>
-        <div class="code-block">
+        <div class="code-block" id="code-docker">
+          <button class="copy-btn" data-target="code-docker">Copy</button>
           <span class="cmd">git clone</span> https://github.com/predomics/predomicsapp-web.git<br/>
           <span class="cmd">cd</span> predomicsapp-web<br/>
           <span class="cmd">docker compose up -d</span><br/><br/>
@@ -470,7 +736,8 @@
       </div>
       <div class="code-card">
         <h3>&#x1F40D; Python</h3>
-        <div class="code-block">
+        <div class="code-block" id="code-python">
+          <button class="copy-btn" data-target="code-python">Copy</button>
           <span class="kw">import</span> gpredomicspy<br/><br/>
           param = gpredomicspy.<span class="cmd">Param</span>()<br/>
           param.<span class="cmd">load</span>(<span class="str">"params.yaml"</span>)<br/>
@@ -480,8 +747,8 @@
       </div>
       <div class="code-card">
         <h3>&#x1F4CA; R (gpredomicsR)</h3>
-        <div class="code-block">
-          <span class="comment"># Coming soon &mdash; R bindings for gpredomics</span><br/>
+        <div class="code-block" id="code-r">
+          <button class="copy-btn" data-target="code-r">Copy</button>
           devtools::<span class="cmd">install_github</span>(<span class="str">"predomics/gpredomicsR"</span>)<br/><br/>
           <span class="kw">library</span>(gpredomicsR)<br/>
           result &lt;- <span class="cmd">gpredomics.fit</span>(params)<br/>
@@ -492,36 +759,156 @@
 </section>
 
 <!-- PUBLICATION -->
-<section class="pub-section">
+<section class="pub-section reveal">
   <div class="container">
     <div class="section-label">Research</div>
     <h2 class="section-title">Publication</h2>
     <div class="pub-card">
-      <div class="journal">GigaScience, 2020</div>
-      <div class="title">Interpretable and accurate prediction scores for metagenomics data using a ternary encoding approach</div>
-      <div class="authors">Prifti E., Chevaleyre Y., Hanczar B., Zucker J.D. et al.</div>
+      <div class="journal">GigaScience, Volume 9, Issue 3, March 2020</div>
+      <div class="title">Interpretable and accurate prediction models for metagenomics data</div>
+      <div class="authors">Prifti E., Chevaleyre Y., Hanczar B., Belda E., Danchin A., Cl&eacute;ment K., &amp; Zucker J.-D.</div>
+      <a href="https://doi.org/10.1093/gigascience/giaa010" class="doi-link" target="_blank" rel="noopener">DOI: 10.1093/gigascience/giaa010 &rarr;</a>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-links">
-    <a href="https://github.com/predomics">GitHub</a>
-    <a href="/docs/">Documentation</a>
-    <a href="mailto:edi.prifti@ird.fr">Contact</a>
-    <a href="https://github.com/predomics/predomicspkg/issues">Issues</a>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <img src="/docs/logo.png" alt="Predomics" />
+        <span>Predomics</span>
+      </div>
+      <p class="footer-about">
+        Open-source suite for building interpretable, parsimonious classification
+        models from high-dimensional omics data using evolutionary algorithms.
+        Developed at IRD&nbsp;/&nbsp;UMMISCO.
+      </p>
+    </div>
+    <div class="footer-col">
+      <h4>Suite</h4>
+      <a href="https://github.com/predomics/gpredomics">gpredomics (Rust)</a>
+      <a href="https://github.com/predomics/predomicsapp-web">PredomicsApp (Web)</a>
+      <a href="https://github.com/predomics/predomicspkg">gpredomicsR (R)</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="/docs/">Documentation</a>
+      <a href="/docs/Installation.html">Installation</a>
+      <a href="/docs/Features.html">Features</a>
+      <a href="/docs/FAQs.html">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h4>Community</h4>
+      <a href="https://github.com/predomics">GitHub</a>
+      <a href="https://github.com/predomics/predomicsapp-web/issues">Issues</a>
+      <a href="https://doi.org/10.1093/gigascience/giaa010">Paper</a>
+      <a href="mailto:edi.prifti@ird.fr">Contact</a>
+    </div>
   </div>
-  <p>&copy; 2024 Predomics &mdash; IRD / UMMISCO &mdash; Open Source (MIT)</p>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Predomics &mdash; IRD / UMMISCO &mdash; GPL-3.0 License</span>
+    <div class="footer-badges">
+      <span class="footer-badge">Rust</span>
+      <span class="footer-badge">Python</span>
+      <span class="footer-badge">Vue.js</span>
+      <span class="footer-badge">FastAPI</span>
+      <span class="footer-badge">Docker</span>
+    </div>
+  </div>
 </footer>
 
 <script>
-function showScreenshot(name) {
-  document.querySelectorAll('.screenshot-item').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.screenshot-tab').forEach(el => el.classList.remove('active'));
-  document.getElementById('ss-' + name).classList.add('active');
-  event.target.classList.add('active');
+// ── Nav scroll effect ──
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+// ── Mobile menu toggle ──
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+// Close mobile menu on link click
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+
+// ── Scroll reveal with IntersectionObserver ──
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.08, rootMargin: '0px 0px -60px 0px' }
+);
+document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => revealObserver.observe(el));
+
+// ── Screenshot tabs ──
+document.querySelectorAll('.screenshot-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const target = tab.dataset.target;
+    document.querySelectorAll('.screenshot-item').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.screenshot-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('ss-' + target).classList.add('active');
+    tab.classList.add('active');
+  });
+});
+
+// Auto-rotate screenshots
+let ssAutoplay;
+function startAutoplay() {
+  ssAutoplay = setInterval(() => {
+    const tabs = [...document.querySelectorAll('.screenshot-tab')];
+    const active = tabs.findIndex(t => t.classList.contains('active'));
+    const next = (active + 1) % tabs.length;
+    tabs[next].click();
+  }, 5000);
 }
+function stopAutoplay() { clearInterval(ssAutoplay); }
+startAutoplay();
+document.querySelectorAll('.screenshot-tab').forEach(t => {
+  t.addEventListener('click', () => { stopAutoplay(); startAutoplay(); });
+});
+
+// ── Counter animation ──
+function animateCounters() {
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1800;
+    const start = performance.now();
+    function tick(now) {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 4);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+const heroObs = new IntersectionObserver(
+  (entries) => { if (entries[0].isIntersecting) { animateCounters(); heroObs.disconnect(); } },
+  { threshold: 0.3 }
+);
+heroObs.observe(document.querySelector('.hero'));
+
+// ── Copy buttons ──
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const block = document.getElementById(btn.dataset.target);
+    const text = block.textContent.replace('Copy', '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+    });
+  });
+});
 </script>
 
 </body>

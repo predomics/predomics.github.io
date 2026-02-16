@@ -4,3 +4,5 @@ _site/
 .DS_Store
 .sass-cache/
 vendor/
+node_modules/
+package-lock.json
