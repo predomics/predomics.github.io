@@ -418,6 +418,34 @@
     }
     .pub-card .doi-link:hover { color: white; }
 
+    /* ═══════════════ TEAM ═══════════════ */
+    .team-section { background: linear-gradient(180deg, var(--bg-deep) 0%, #080b1a 100%); }
+    .team-groups { display: flex; flex-direction: column; gap: 2.5rem; }
+    .team-group-label {
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--accent); margin-bottom: 1rem;
+    }
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+    .team-member {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 1.25rem;
+      transition: all 0.3s; position: relative;
+    }
+    .team-member:hover { border-color: var(--border-hover); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.3); }
+    .team-member.lead { border-top: 2px solid var(--accent); }
+    .tm-name { font-size: 0.95rem; font-weight: 700; color: white; margin-bottom: 0.2rem; }
+    .tm-role { font-size: 0.78rem; font-weight: 500; color: var(--accent-light); margin-bottom: 0.15rem; }
+    .tm-affil { font-size: 0.72rem; color: var(--text-dim); margin-bottom: 0.5rem; }
+    .tm-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.55; }
+    .tm-orcid {
+      display: inline-block; margin-top: 0.5rem;
+      font-size: 0.68rem; color: var(--green); text-decoration: none;
+      padding: 0.15rem 0.5rem; border-radius: 10px;
+      background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.15);
+      transition: all 0.2s;
+    }
+    .tm-orcid:hover { background: rgba(16, 185, 129, 0.15); color: var(--emerald); }
+
     /* ═══════════════ FOOTER ═══════════════ */
     footer {
       padding: 5rem 2rem 2rem; border-top: 1px solid var(--border);
@@ -501,6 +529,7 @@
     <a href="#usecases">Use Cases</a>
     <a href="#suite">Ecosystem</a>
     <a href="#quickstart">Quick Start</a>
+    <a href="#team">Team</a>
     <a href="/docs/">Docs</a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Menu">
@@ -772,6 +801,114 @@
   </div>
 </section>
 
+<!-- TEAM -->
+<section class="team-section reveal" id="team">
+  <div class="container">
+    <div class="section-label">People</div>
+    <h2 class="section-title">Team & Contributors</h2>
+    <p class="section-desc">The researchers, developers, and students behind Predomics.</p>
+    <div class="team-groups">
+
+      <div>
+        <div class="team-group-label">Core Team</div>
+        <div class="team-grid reveal-stagger">
+          <div class="team-member lead">
+            <div class="tm-name">Edi Prifti</div>
+            <div class="tm-role">Creator & Lead</div>
+            <div class="tm-affil">IRD / UMMISCO</div>
+            <div class="tm-desc">Created Predomics in 2015. Designed the evolutionary algorithms, Family of Best Models, and the web application.</div>
+            <a href="https://orcid.org/0000-0001-8861-1305" class="tm-orcid" target="_blank" rel="noopener">ORCID: 0000-0001-8861-1305</a>
+          </div>
+          <div class="team-member lead">
+            <div class="tm-name">Jean-Daniel Zucker</div>
+            <div class="tm-role">Co-Creator</div>
+            <div class="tm-affil">IRD / UMMISCO</div>
+            <div class="tm-desc">Co-led the work since 2015. Proposed the beam search heuristic and founding ideas.</div>
+            <a href="https://orcid.org/0000-0002-5597-7922" class="tm-orcid" target="_blank" rel="noopener">ORCID: 0000-0002-5597-7922</a>
+          </div>
+          <div class="team-member">
+            <div class="tm-name">Yann Chevaleyre</div>
+            <div class="tm-role">Mathematical Optimization</div>
+            <div class="tm-affil">LIPN</div>
+            <div class="tm-desc">Worked on balances and the TerDa optimization method.</div>
+          </div>
+          <div class="team-member">
+            <div class="tm-name">Blaise Hanczar</div>
+            <div class="tm-role">Model Selection</div>
+            <div class="tm-affil">IBISC</div>
+            <div class="tm-desc">Contributed to best model selection and general framework ideas.</div>
+          </div>
+          <div class="team-member">
+            <div class="tm-name">Eugeni Belda</div>
+            <div class="tm-role">Interpretability & Validation</div>
+            <div class="tm-affil">IRD</div>
+            <div class="tm-desc">Signature interpretability, microbiome applications, and extensive dataset testing.</div>
+            <a href="https://orcid.org/0000-0003-4307-5072" class="tm-orcid" target="_blank" rel="noopener">ORCID: 0000-0003-4307-5072</a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="team-group-label">gpredomics Rust Engine</div>
+        <div class="team-grid reveal-stagger">
+          <div class="team-member">
+            <div class="tm-name">Louison Lesage</div>
+            <div class="tm-role">Lead Rust Developer</div>
+            <div class="tm-affil">GMT Science</div>
+            <div class="tm-desc">Led the Rust engine rewrite delivering up to 1,000x performance gains.</div>
+            <a href="https://orcid.org/0009-0000-0252-6311" class="tm-orcid" target="_blank" rel="noopener">ORCID: 0009-0000-0252-6311</a>
+          </div>
+          <div class="team-member">
+            <div class="tm-name">Raynald de Lahond&egrave;s</div>
+            <div class="tm-role">Rust Developer</div>
+            <div class="tm-affil">GMT Science</div>
+            <div class="tm-desc">Engine architecture and optimization for the Rust implementation.</div>
+            <a href="https://orcid.org/0009-0000-2862-9589" class="tm-orcid" target="_blank" rel="noopener">ORCID: 0009-0000-2862-9589</a>
+          </div>
+          <div class="team-member">
+            <div class="tm-name">Vadim Puller</div>
+            <div class="tm-role">Scientific Developer</div>
+            <div class="tm-affil">GMT Science</div>
+            <div class="tm-desc">Algorithm implementation and validation in the Rust engine.</div>
+            <a href="https://orcid.org/0000-0002-3900-8283" class="tm-orcid" target="_blank" rel="noopener">ORCID: 0000-0002-3900-8283</a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="team-group-label">Contributors</div>
+        <div class="team-grid reveal-stagger">
+          <div class="team-member">
+            <div class="tm-name">Lucas Robin</div>
+            <div class="tm-desc">TerGa2 algorithm implementation and code optimization (2016).</div>
+          </div>
+          <div class="team-member">
+            <div class="tm-name">Shasha Cui</div>
+            <div class="tm-desc">Feature importance and model stability analysis (2017).</div>
+          </div>
+          <div class="team-member">
+            <div class="tm-name">Magali Cousin Thorez</div>
+            <div class="tm-desc">Signature simplification and microbial ecosystem exploration (2019).</div>
+          </div>
+          <div class="team-member">
+            <div class="tm-name">Youcef Sklab</div>
+            <div class="tm-desc">Co-led student projects for the R Shiny PredomicsApp.</div>
+          </div>
+          <div class="team-member">
+            <div class="tm-name">Gaspar Roy</div>
+            <div class="tm-desc">Evolved version of the R Shiny application (2023).</div>
+          </div>
+          <div class="team-member">
+            <div class="tm-name">Fabien Kambu</div>
+            <div class="tm-desc">Testing, documentation, and deployment of PredomicsApp.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-grid">
@@ -808,7 +945,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <span>&copy; 2025 Predomics &mdash; IRD / UMMISCO &mdash; GPL-3.0 License</span>
+    <span>&copy; 2025-2026 Predomics &mdash; IRD / UMMISCO &mdash; GPL-3.0 License</span>
     <div class="footer-badges">
       <span class="footer-badge">Rust</span>
       <span class="footer-badge">Python</span>
