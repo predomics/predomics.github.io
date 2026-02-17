@@ -9,5 +9,5 @@ nav_order: 9
 
 If you have any questions or feedback, please contact us at:
 
--   Email: [contact\@predomics.com](mailto:edi.prifti@ird.fr){.email}
--   GitHub Issues: [Predomics Issues](https://github.com/predomics/predomicspkg/issues)
+-   Email: [edi.prifti@ird.fr](mailto:edi.prifti@ird.fr)
+-   GitHub Issues: [predomicsapp-web](https://github.com/predomics/predomicsapp-web/issues) | [gpredomics](https://github.com/predomics/gpredomics/issues)
