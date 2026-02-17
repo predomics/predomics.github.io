@@ -35,6 +35,9 @@ Rather than selecting a single "best" model, Predomics tracks the **Family of Be
 - Robustness assessment: stable features (high prevalence) are more likely to generalize
 - Functional annotations: link features to known biological functions (butyrate production, inflammation, transit time, oral origin)
 - Co-presence analysis: detect feature pairs that co-occur or exclude each other significantly
+- **Stability analysis**: Kuncheva, Tanimoto, and weighted consistency indices per sparsity level to identify the "sweet spot" where models are both performant and stable
+- **Model clustering**: hierarchical clustering (Tanimoto distance) reveals distinct model families and prototype representatives
+- **Feature × sparsity heatmap**: feature prevalence across model sizes reveals the "core signature" that persists regardless of k
 
 ## Jury / Ensemble Voting
 

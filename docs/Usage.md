@@ -23,6 +23,7 @@ nav_order: 4
    - **Comparative**: compare multiple jobs side-by-side
    - **Co-presence**: feature co-occurrence analysis
    - **Ecosystem**: co-abundance network with taxonomic coloring and module detection
+   - **Stability**: model stability indices (Kuncheva, Tanimoto, CW_rel), feature × sparsity heatmap, model clustering dendrogram
 
 ### Batch Mode
 
