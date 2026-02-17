@@ -45,7 +45,7 @@ nav_order: 8
 
 ## Funding
 
--   **ANR DREAMY** (ANR-21-CE45-0002) -- *Data-driven pREdictive fActors of Multimorbidity and polYpharmacy*. Funded the development of the Rust engine and the web application. PI: Edi Prifti. Partners: UMMISCO, NUTRIOMICS, LAMSADE, IBISC.
+-   **ANR DeepIntegrOmics** (ANR-21-CE45-0030) -- *End-to-End Deep Learning for Precision Medicine through Metagenomics and Cost-Sensitive Data Integration*. PI: Jean-Daniel Zucker (UMMISCO). Partners: UMMISCO, NUTRIOMICS, LAMSADE, IBISC.
 
 ## Industry Partner
 
