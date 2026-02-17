@@ -1,8 +1,7 @@
 ---
 layout: default
 title: Installation
-parent: Documentation
-nav_order: 2
+nav_order: 7
 ---
 
 # Installation

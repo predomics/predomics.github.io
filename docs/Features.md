@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Features
-parent: Documentation
 nav_order: 3
 ---
 

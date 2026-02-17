@@ -19,6 +19,16 @@ The models use simple mathematical languages:
 
 These compact signatures are easy to interpret, validate, and translate into clinical biomarkers.
 
+## Methods
+
+For detailed descriptions of the algorithms and statistical methods, see the [Methods](Methods.md) section:
+- [Model Languages & Scoring](Methods-ModelLanguages.md) -- BTR + Pow2 languages, threshold optimization, fitness
+- [Search Algorithms](Methods-Algorithms.md) -- GA, Beam Search, MCMC, cross-validation
+- [Family of Best Models](Methods-FBM.md) -- FBM definition, co-presence, jury voting
+- [Stability Analysis](Methods-Stability.md) -- Kuncheva, Tanimoto, CW_rel indices, model clustering
+- [Ecosystem Network](Methods-Ecosystem.md) -- Co-abundance network, Louvain communities, taxonomic coloring
+- [Feature Importance & Evaluation](Methods-FeatureImportance.md) -- MDA, SHAP, metrics, validation
+
 ## Architecture
 
 ```
