@@ -22,6 +22,7 @@ nav_order: 4
    - **Jury**: ensemble voting, confusion matrices, vote matrix, sample predictions
    - **Comparative**: compare multiple jobs side-by-side
    - **Co-presence**: feature co-occurrence analysis
+   - **Ecosystem**: co-abundance network with taxonomic coloring and module detection
 
 ### Batch Mode
 

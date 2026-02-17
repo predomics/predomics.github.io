@@ -65,6 +65,19 @@ Build an ensemble of expert models from the best individuals across generations:
 - **Coefficient direction** -- Bar chart of model coefficients showing which features push toward which class
 - **Waterfall chart** -- Feature contribution decomposition for the best model
 
+## Ecosystem Analysis
+
+Visualize and explore microbial ecosystems as co-abundance networks, inspired by the Interpred approach (Cousin-Thorez, 2019) and the SCAPIS ecosystem work (Prifti, 2024).
+
+- **Co-abundance network** -- Species correlation network built from the abundance matrix using pairwise Spearman correlations. Edges connect species with |rho| above a configurable threshold.
+- **Community detection** -- Louvain algorithm partitions the network into ecological modules (niches). Modularity score quantifies partition quality.
+- **Taxonomic coloring** -- Hierarchical color scheme: phylum base colors (SCAPIS palette) with family-level shading via lighten/darken gradients. Produces visually distinct colors for every family within each phylum.
+- **Multiple layout algorithms** -- Organic (Fruchterman-Reingold with simulated annealing), Force-directed, Circle, and Radial layouts.
+- **Three color modes** -- Taxonomy (phylum/family), Module (Louvain community), or Enrichment (which class each species is enriched in).
+- **FBM overlay** -- Annotate network nodes with data from the Family of Best Models: prevalence of each species across models and dominant coefficient direction (+1/-1). Bridges the ecological view with the predictive view.
+- **Interactive controls** -- Adjustable prevalence threshold, correlation threshold, class filtering (all/class 0/class 1), and module highlight on click.
+- **Node metrics** -- Degree, betweenness centrality, per-class prevalence, mean abundance.
+
 ## Web Application (PredomicsApp)
 
 The web application provides a complete analysis workflow:
@@ -74,7 +87,7 @@ The web application provides a complete analysis workflow:
 - **Data exploration** -- Feature statistics, prevalence distribution, volcano plots, barcode visualization
 - **Parameter configuration** -- Template system, admin defaults, batch mode for sweeping parameters
 - **Real-time monitoring** -- Live console output with progress sparkline during job execution
-- **Interactive results** -- Plotly-based charts for all result views (summary, population, jury, comparative, co-presence)
+- **Interactive results** -- Plotly-based charts for all result views (summary, population, jury, comparative, co-presence, ecosystem)
 - **Export options** -- PDF biomarker reports, HTML reports, CSV tables, Python notebooks (.ipynb), R notebooks (.Rmd)
 - **Prediction API** -- Deploy trained models as REST endpoints for programmatic scoring
 - **User management** -- JWT authentication, API keys, role-based access (admin, viewer, editor)
